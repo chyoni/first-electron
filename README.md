@@ -18,3 +18,5 @@ communication(inter-process communication => IPC)이 이루어져야 한다. 그
     - Shortcut은 property에 accelerator라는 property를 사용
 
 - #03 Drag event
+
+- #04 Notification
