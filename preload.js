@@ -11,9 +11,16 @@
 
 const { contextBridge, ipcRenderer } = require("electron");
 
-contextBridge.exposeInMainWorld("versions", {
-  node: () => process.versions.node,
-  chrome: () => process.versions.chrome,
-  electron: () => process.versions.electron,
-  ping: () => ipcRenderer.invoke("ping"),
+// ! 이 아래는 아래와 같은 api들을 api key(versions, darkMode...) 를 선언하여 내가 이런 api를 사용하겠다라고 define하는 부분
+
+// contextBridge.exposeInMainWorld("versions", {
+//   node: () => process.versions.node,
+//   chrome: () => process.versions.chrome,
+//   electron: () => process.versions.electron,
+//   ping: () => ipcRenderer.invoke("ping"),
+// });
+
+contextBridge.exposeInMainWorld("darkMode", {
+  toggle: () => ipcRenderer.invoke("dark-mode:toggle"),
+  system: () => ipcRenderer.invoke("dark-mode:system"),
 });
