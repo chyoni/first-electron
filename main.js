@@ -8,6 +8,8 @@ const {
 } = require("electron");
 
 const path = require("path");
+const fs = require("fs");
+const https = require("https");
 
 const createWindow = () => {
   const win = new BrowserWindow({
@@ -33,23 +35,44 @@ const createWindow = () => {
   win.loadFile("index.html");
 };
 
-const menu = new Menu();
-menu.append(
-  new MenuItem({
-    label: "Electron",
-    submenu: [
-      {
-        role: "help",
-        accelerator:
-          process.platform === "darwin" ? "Alt+Cmd+A" : "Alt+Shift+I",
-        click: () => {
-          console.log("Electron rocks!");
-        },
-      },
-    ],
-  })
+const iconName = path.join(__dirname, "iconForDragAndDrop.png");
+const icon = fs.createWriteStream(iconName);
+// Create a new file to copy - you can also copy existing files.
+fs.writeFileSync(
+  path.join(__dirname, "drag-and-drop-1.md"),
+  "# First file to test drag and drop"
 );
-Menu.setApplicationMenu(menu);
+fs.writeFileSync(
+  path.join(__dirname, "drag-and-drop-2.md"),
+  "# Second file to test drag and drop"
+);
+
+https.get("https://img.icons8.com/ios/452/drag-and-drop.png", (response) => {
+  response.pipe(icon);
+});
+ipcMain.on("ondragstart", (event, filePath) => {
+  event.sender.startDrag({
+    file: path.join(__dirname, filePath),
+    icon: iconName,
+  });
+});
+// const menu = new Menu();
+// menu.append(
+//   new MenuItem({
+//     label: "Electron",
+//     submenu: [
+//       {
+//         role: "help",
+//         accelerator:
+//           process.platform === "darwin" ? "Alt+Cmd+A" : "Alt+Shift+I",
+//         click: () => {
+//           console.log("Electron rocks!");
+//         },
+//       },
+//     ],
+//   })
+// );
+// Menu.setApplicationMenu(menu);
 
 const dockMenu = Menu.buildFromTemplate([
   {

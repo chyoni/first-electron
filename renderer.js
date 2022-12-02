@@ -20,3 +20,13 @@ document
     await window.darkMode.system();
     document.getElementById("theme-source").innerHTML = "System";
   });
+
+document.getElementById("drag1").ondragstart = (event) => {
+  event.preventDefault();
+  window.drag.startDrag("drag-and-drop-1.md");
+};
+
+document.getElementById("drag2").ondragstart = (event) => {
+  event.preventDefault();
+  window.drag.startDrag("drag-and-drop-2.md");
+};
